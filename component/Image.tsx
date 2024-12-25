@@ -51,5 +51,7 @@ export default function FaceDetectionImage({
     });
   };
 
-  return <canvas ref={canvasRef} className="object-contain"></canvas>;
+  return (
+    <canvas ref={canvasRef} className="object-contain w-full h-full"></canvas>
+  );
 }

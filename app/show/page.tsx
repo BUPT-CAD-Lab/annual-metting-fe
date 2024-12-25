@@ -43,7 +43,7 @@ export default function Page() {
     // 定时轮询
     const interval = setInterval(() => {
       fetchFaces();
-    }, 1000); // 设置轮询间隔为 1 秒
+    }, 2500); // 设置轮询间隔为 1 秒
 
     // 清理定时器
     return () => clearInterval(interval);
@@ -54,7 +54,7 @@ export default function Page() {
       <div className="flex w-screen h-screen flex-col p-2 bg-white text-black">
         <div className="flex flex-row space-x-4 py-5 items-center justify-center">
           <Image src="/cad_logo.png" alt="show" width={40} height={40}></Image>
-          <div className="text-2xl font-bold">CAD 2024年 年会</div>
+          <div className="text-2xl font-bold">北邮 CAD 实验室 2024年会</div>
         </div>
         <div className="flex w-full h-full overflow-hidden">
           <Carousel
