@@ -79,15 +79,13 @@ export default function Page() {
               </div>
             )}
             autoplayDelay={5000}
-            autoplay={false}
+            autoplay={true}
             loop={true}
             placeholder={undefined}
             transition={{
               type: 'tween',
               duration: 0.5,
             }}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
           >
             {photos.map((photo) => (
               <div

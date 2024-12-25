@@ -51,10 +51,5 @@ export default function FaceDetectionImage({
     });
   };
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="max-h-full max-w-full rounded-xl"
-    ></canvas>
-  );
+  return <canvas ref={canvasRef} className="object-contain"></canvas>;
 }
