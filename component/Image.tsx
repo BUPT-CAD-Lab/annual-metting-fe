@@ -56,5 +56,7 @@ export default function FaceDetectionImage({
   };
 
   // object-contain 防止图片超出父元素和拉伸裁切
-  return <canvas ref={canvasRef} className="object-contain"></canvas>;
+  return (
+    <canvas ref={canvasRef} className="object-contain rounded-xl"></canvas>
+  );
 }

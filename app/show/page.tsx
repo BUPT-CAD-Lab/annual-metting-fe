@@ -13,6 +13,7 @@ export default function Page() {
   useEffect(() => {
     function genPhoto(faces: Face[]) {
       let photos: Photo[] = [];
+
       faces.forEach((face) => {
         const photo = photos.find((p) => p.file_id === face.file_id);
         if (photo) {
@@ -28,6 +29,14 @@ export default function Page() {
 
       // 排序：根据 faces 数量从多到少排序
       photos.sort((a, b) => b.faces.length - a.faces.length);
+
+      // 头插默认图片
+      photos.unshift({
+        id: -1,
+        file_id: '-1',
+        file_name: '/default.jpeg',
+        faces: [],
+      } as Photo);
 
       // 切片：只选取前 50 张图片进行轮播
       photos = photos.slice(0, 50);
@@ -58,10 +67,12 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex w-screen h-screen flex-col p-4 bg-white text-black">
-        <div className="flex flex-row space-x-4 py-5 items-center justify-center">
+      <div className="flex w-screen h-screen flex-col bg-white p-2 text-black">
+        <div className="flex flex-row space-x-4 pt-2 pb-2 items-center justify-center">
           <Image src="/cad_logo.png" alt="show" width={40} height={40}></Image>
-          <div className="text-2xl font-bold">北邮 CAD 实验室 2024年会</div>
+          <div className="text-2xl font-bold">
+            北京邮电大学PCN&CAD中心 2024 年会
+          </div>
         </div>
         <div className="flex w-full h-full overflow-hidden">
           <Carousel
@@ -96,17 +107,23 @@ export default function Page() {
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            {photos.map((photo) => (
-              <div
-                key={photo.file_id}
-                className="flex h-full w-full items-center justify-center"
-              >
-                <FaceDetectionImage
-                  imageUrl={photo.file_name}
-                  faces={photo.faces}
-                />
+            {photos.length > 0 ? (
+              photos.map((photo) => (
+                <div
+                  key={photo.file_id}
+                  className="flex h-full w-full items-center justify-center"
+                >
+                  <FaceDetectionImage
+                    imageUrl={photo.file_name}
+                    faces={photo.faces}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <FaceDetectionImage imageUrl={'/default.jpeg'} faces={[]} />
               </div>
-            ))}
+            )}
           </Carousel>
         </div>
       </div>
