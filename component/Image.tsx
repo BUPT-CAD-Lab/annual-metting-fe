@@ -49,9 +49,12 @@ export default function FaceDetectionImage({
       };
       ctx.strokeRect(box.left, box.top, box.width, box.height);
     });
+
+    // 设置 style 防止图片超出父元素
+    canvas.style.maxHeight = '100%';
+    canvas.style.maxWidth = '100%';
   };
 
-  return (
-    <canvas ref={canvasRef} className="object-contain w-full h-full"></canvas>
-  );
+  // object-contain 防止图片超出父元素和拉伸裁切
+  return <canvas ref={canvasRef} className="object-contain"></canvas>;
 }

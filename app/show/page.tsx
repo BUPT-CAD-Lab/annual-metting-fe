@@ -12,7 +12,7 @@ export default function Page() {
 
   useEffect(() => {
     function genPhoto(faces: Face[]) {
-      const photos: Photo[] = [];
+      let photos: Photo[] = [];
       faces.forEach((face) => {
         const photo = photos.find((p) => p.file_id === face.file_id);
         if (photo) {
@@ -25,6 +25,13 @@ export default function Page() {
           });
         }
       });
+
+      // 排序：根据 faces 数量从多到少排序
+      photos.sort((a, b) => b.faces.length - a.faces.length);
+
+      // 切片：只选取前 50 张图片进行轮播
+      photos = photos.slice(0, 50);
+
       setPhotos(photos);
     }
 
@@ -51,7 +58,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex w-screen h-screen flex-col p-2 bg-white text-black">
+      <div className="flex w-screen h-screen flex-col p-4 bg-white text-black">
         <div className="flex flex-row space-x-4 py-5 items-center justify-center">
           <Image src="/cad_logo.png" alt="show" width={40} height={40}></Image>
           <div className="text-2xl font-bold">北邮 CAD 实验室 2024年会</div>
@@ -70,15 +77,15 @@ export default function Page() {
                 {new Array(length).fill('').map((_, i) => (
                   <span
                     key={i}
-                    className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                      activeIndex === i ? 'w-8 bg-black' : 'w-4 bg-black/50'
+                    className={`block h-1 cursor-pointer rounded-full transition-all content-[''] ${
+                      activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
                     }`}
                     onClick={() => setActiveIndex(i)}
                   />
                 ))}
               </div>
             )}
-            autoplayDelay={5000}
+            autoplayDelay={10000}
             autoplay={true}
             loop={true}
             placeholder={undefined}
@@ -86,6 +93,8 @@ export default function Page() {
               type: 'tween',
               duration: 0.5,
             }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           >
             {photos.map((photo) => (
               <div

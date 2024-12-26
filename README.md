@@ -8,6 +8,20 @@
 
 ![1](./assets/1.png)
 
+## 安装依赖
+
+```bash
+npm ci
+```
+
+### 修改 prisma schema
+
+修改 `prisma/schema.prisma` 并生成
+
+```bash
+npx prisma generate
+```
+
 ## 启动
 
 ```bash
