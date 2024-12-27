@@ -9,6 +9,9 @@ export async function getFaces() {
     where: {
       flag: 1,
     },
+    orderBy: {
+      checkin_time: 'asc',
+    },
   });
   return faces;
 }

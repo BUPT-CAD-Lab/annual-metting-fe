@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getFaces } from '../actions/getFaces';
 import FaceDetectionImage from '@/component/Image';
 import { Face, Photo } from '@/model/Photo';
+import assert from 'assert';
 
 export default function Page() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -27,8 +28,29 @@ export default function Page() {
         }
       });
 
-      // 排序：根据 faces 数量从多到少排序
-      photos.sort((a, b) => b.faces.length - a.faces.length);
+      // 排序：根据 last face 的 checkin_time 从大到小
+      // photos.sort((a, b) => b.faces.length - a.faces.length);
+      photos.sort((a, b) => {
+        assert(a.faces.length > 0 && b.faces.length > 0);
+        const a_time = a.faces[a.faces.length - 1].checkin_time;
+        const b_time = b.faces[b.faces.length - 1].checkin_time;
+        if (a_time > b_time) {
+          // a 比 b 更新（更大）
+          return -1;
+        }
+        return 1;
+      });
+
+      // 切片：只选取前 9 张图片进行轮播
+      photos = photos.slice(0, 9);
+
+      photos.reverse();
+
+      // console.log('====================================');
+      // photos.forEach((photo) => {
+      //   console.log(photo.faces[photo.faces.length - 1].checkin_time);
+      // });
+      // console.log('====================================');
 
       // 头插默认图片
       photos.unshift({
@@ -37,9 +59,6 @@ export default function Page() {
         file_name: '/default.jpeg',
         faces: [],
       } as Photo);
-
-      // 切片：只选取前 50 张图片进行轮播
-      photos = photos.slice(0, 50);
 
       setPhotos(photos);
     }
