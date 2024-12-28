@@ -140,7 +140,7 @@ export default function Page() {
 
     const slider = setInterval(() => {
       ref.current?.click();
-    }, 3000)  // 设置轮播间隔为 3 秒
+    }, 5000)  // 设置轮播间隔为 3 秒
 
 
     // 清理定时器
@@ -188,7 +188,7 @@ export default function Page() {
                 ))}
               </div>
             )}
-            autoplayDelay={10000}
+            // autoplayDelay={10000}
             autoplay={true}
             loop={true}
             placeholder={undefined}
