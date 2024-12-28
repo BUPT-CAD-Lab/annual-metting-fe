@@ -1,12 +1,12 @@
 'use client';
 
-import { Carousel, CarouselProps } from '@material-tailwind/react';
+import FaceDetectionImage from '@/component/Image';
+import { Face, Photo } from '@/model/Photo';
+import { Carousel } from '@material-tailwind/react';
+import assert from 'assert';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { getFaces } from '../actions/getFaces';
-import FaceDetectionImage from '@/component/Image';
-import { Face, Photo } from '@/model/Photo';
-import assert from 'assert';
 
 const defaultPhoto: Photo = {
   id: 0,
@@ -15,10 +15,9 @@ const defaultPhoto: Photo = {
   faces: [],
 } as Photo;
 
-
 export default function Page() {
   const initPhotos: Photo[] = [];
-  for(let i = 0; i < 10; i++) {
+  for (let i = 0; i < 10; i++) {
     initPhotos.push(defaultPhoto);
   }
 
@@ -31,11 +30,17 @@ export default function Page() {
 
   const updateNextPhoto = (activeIndex: number) => {
     const nextIndex = (activeIndex + 1) % photos.length;
-    if ((nextIndex === 0 && photosQueue.current.length >= 9)|| photosQueue.current.length === 0 || (photosQueue.current.length < 9 && nextIndex % (photosQueue.current.length + 1) === 0)) {
+    if (
+      (nextIndex === 0 && photosQueue.current.length >= 9) ||
+      photosQueue.current.length === 0 ||
+      (photosQueue.current.length < 9 &&
+        nextIndex % (photosQueue.current.length + 1) === 0)
+    ) {
       photos[nextIndex] = defaultPhoto;
     } else {
       photos[nextIndex] = photosQueue.current[photosQueuePointer.current];
-      photosQueuePointer.current = (photosQueuePointer.current + 1) % photosQueue.current.length;
+      photosQueuePointer.current =
+        (photosQueuePointer.current + 1) % photosQueue.current.length;
     }
     setPhotos([...photos]);
     currentIndex.current = activeIndex;
@@ -77,11 +82,9 @@ export default function Page() {
 
     // 合并
     photosQueue.current = oldPhotos.concat(newPhotoRecords);
-  } 
+  };
 
   useEffect(() => {
-
-
     // 定时轮训数据库
     function genPhoto(faces: Face[]) {
       if (faces.length === 0) {
@@ -95,21 +98,23 @@ export default function Page() {
       const newPhotoRecords: Photo[] = [];
 
       let nextCheckinTime = lastCheckinTime.current;
-      faces.filter(face => face.checkin_time > lastCheckinTime.current ).forEach((face) => {
-        if (face.checkin_time > nextCheckinTime) {
-          nextCheckinTime = face.checkin_time;
-        }
-        const photo = newPhotoRecords.find((p) => p.file_id === face.file_id);
-        if (photo) {
-          photo.faces.push(face);
-        } else {
-          newPhotoRecords.push({
-            file_id: face.file_id,
-            file_name: face.file_name,
-            faces: [face],
-          });
-        }
-      });
+      faces
+        .filter((face) => face.checkin_time > lastCheckinTime.current)
+        .forEach((face) => {
+          if (face.checkin_time > nextCheckinTime) {
+            nextCheckinTime = face.checkin_time;
+          }
+          const photo = newPhotoRecords.find((p) => p.file_id === face.file_id);
+          if (photo) {
+            photo.faces.push(face);
+          } else {
+            newPhotoRecords.push({
+              file_id: face.file_id,
+              file_name: face.file_name,
+              faces: [face],
+            });
+          }
+        });
 
       lastCheckinTime.current = nextCheckinTime;
 
@@ -118,7 +123,7 @@ export default function Page() {
       }
 
       // 将新增的签到记录合并到原来的db中
-      updateQueue(newPhotoRecords)
+      updateQueue(newPhotoRecords);
     }
 
     const fetchFaces = async () => {
@@ -140,8 +145,7 @@ export default function Page() {
 
     const slider = setInterval(() => {
       ref.current?.click();
-    }, 5000)  // 设置轮播间隔为 3 秒
-
+    }, 5000); // 设置轮播间隔为 3 秒
 
     // 清理定时器
     return () => {
@@ -149,7 +153,6 @@ export default function Page() {
       clearInterval(slider);
     };
   }, []);
-
 
   return (
     <>
@@ -164,16 +167,23 @@ export default function Page() {
           <Carousel
             className="flex w-full h-full"
             prevArrow={({ handlePrev, activeIndex }) => (
-              <div onClick={() => {
-                handlePrev();
-                updateNextPhoto(activeIndex);
-              }} className="hidden"></div>
+              <div
+                onClick={() => {
+                  handlePrev();
+                  updateNextPhoto(activeIndex);
+                }}
+                className="hidden"
+              ></div>
             )}
             nextArrow={({ handleNext, activeIndex }) => (
-              <div ref={ref} onClick={() => {
-                handleNext();
-                updateNextPhoto(activeIndex);
-              }} className="hidden"></div>
+              <div
+                ref={ref}
+                onClick={() => {
+                  handleNext();
+                  updateNextPhoto(activeIndex);
+                }}
+                className="hidden"
+              ></div>
             )}
             navigation={({ setActiveIndex, activeIndex, length }) => (
               <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
@@ -188,14 +198,16 @@ export default function Page() {
                 ))}
               </div>
             )}
-            // autoplayDelay={10000}
             autoplay={true}
+            autoplayDelay={5000}
             loop={true}
             placeholder={undefined}
             transition={{
               type: 'tween',
               duration: 0.5,
             }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           >
             {photos.length > 0 ? (
               photos.map((photo) => (
