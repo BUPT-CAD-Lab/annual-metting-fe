@@ -37,18 +37,18 @@ export default function FaceDetectionImage({
     ctx.drawImage(img, 0, 0, img.width, img.height);
 
     // 绘制方框
-    ctx.strokeStyle = '#FFFF00';
-    ctx.lineWidth = 8;
-    faces.forEach((face) => {
-      const { target_x, target_y, target_w, target_h } = face;
-      const box = {
-        left: target_x - exp_x,
-        top: target_y - exp_y,
-        width: target_w + 2 * exp_x,
-        height: target_h + 2 * exp_y,
-      };
-      ctx.strokeRect(box.left, box.top, box.width, box.height);
-    });
+    // ctx.strokeStyle = '#FFFF00';
+    // ctx.lineWidth = 0;
+    // faces.forEach((face) => {
+    //   const { target_x, target_y, target_w, target_h } = face;
+    //   const box = {
+    //     left: target_x - exp_x,
+    //     top: target_y - exp_y,
+    //     width: target_w + 2 * exp_x,
+    //     height: target_h + 2 * exp_y,
+    //   };
+    //   ctx.strokeRect(box.left, box.top, box.width, box.height);
+    // });
 
     // object-contain 防止图片超出父元素和拉伸裁切
     canvas.style.objectFit = 'contain';
